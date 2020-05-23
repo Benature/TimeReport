@@ -14,7 +14,7 @@ def update_db():
     new_entries = get_new_intervals(auth_header)
     insert_intervals(new_entries)
     mysql_switch(0)
-    print "Update complete!"
+    print("Update complete!")
 
 
 def rebuild_table(table):
@@ -36,7 +36,7 @@ def rebuild_table(table):
         insert_types(intervals)
         echo = "Rebuild intervals complete!"
     mysql_switch(0)
-    print echo
+    print(echo)
 
 
 def rebuild_db(op='truncate'):
@@ -55,7 +55,7 @@ def rebuild_db(op='truncate'):
     intervals = get_all_intervals(auth_header)
     insert_all(types, intervals)
     mysql_switch(0)
-    print "Rebuild database complete!"
+    print("Rebuild database complete!")
 
 
 def daily_report(date=None):
@@ -84,17 +84,21 @@ def daily_report(date=None):
     # in case of early date with zero task
     if task_data.shape[0] != 0:
         task_table_plot(task_data)
-        resources = create_resources(['img/sleep_table.png', 'img/group_pie.png', 'img/task_table.png'])
-        headings = ['1. Good Morning!', '2. What\'s up?', '3. How are things going?']
+        resources = create_resources(
+            ['img/sleep_table.png', 'img/group_pie.png', 'img/task_table.png'])
+        headings = ['1. Good Morning!',
+                    '2. What\'s up?', '3. How are things going?']
         widths = [500, None, None]
     else:
-        resources = create_resources(['img/sleep_table.png', 'img/group_pie.png'])
+        resources = create_resources(
+            ['img/sleep_table.png', 'img/group_pie.png'])
         headings = ['1. Good Morning!', '2. What\'s up?']
         widths = [500, None]
     # create_daily_note(dev_token, note_store, title, date_info, resources, headings, widths)
-    create_note(dev_token, note_store, 0, title, resources, headings, widths, tags, date_info)
+    create_note(dev_token, note_store, 0, title, resources,
+                headings, widths, tags, date_info)
     mysql_switch(0)
-    print "Generate daily report for {0}!".format(title)
+    print("Generate daily report for {0}!".format(title))
 
 
 def weekly_report(week=None):
@@ -111,7 +115,8 @@ def weekly_report(week=None):
         start, end = str2level_range(now.strftime('%YW%V'), 1)
     start_date = ts2datetime(start).strftime('%b %d')
     end_date = ts2datetime(end-1).strftime('%b %d')
-    title = ts2datetime(start).strftime("%Y Week%V ({0} - {1})".format(start_date, end_date))
+    title = ts2datetime(start).strftime(
+        "%Y Week%V ({0} - {1})".format(start_date, end_date))
     tags = date_tag(start, 1)
 
     cut_data = get_cut_dataframe(start, end)
@@ -128,12 +133,14 @@ def weekly_report(week=None):
     dev_token, note_store = connect_note()
     resources = create_resources(['img/group_pie.png', 'img/type_table.png', 'img/group_bar.png',
                                   'img/type_bar_grid.png', 'img/sleep_plot.png'])
-    headings = ['1. Group Overview', '2. Type Detail', '3. Group Trends', '4. Type Trends', '5. Sleep Trends']
+    headings = ['1. Group Overview', '2. Type Detail',
+                '3. Group Trends', '4. Type Trends', '5. Sleep Trends']
     widths = [None] * 5
     # create_weekly_note(dev_token, note_store, title, resources, headings, widths)
-    create_note(dev_token, note_store, 1, title, resources, headings, widths, tags)
+    create_note(dev_token, note_store, 1, title,
+                resources, headings, widths, tags)
     mysql_switch(0)
-    print "Generate weekly report for {0}!".format(title)
+    print("Generate weekly report for {0}!".format(title))
 
 
 def monthly_report(month=None):
@@ -150,7 +157,8 @@ def monthly_report(month=None):
         start, end = str2level_range(now.strftime('%YM%m'), 2)
     start_week = ts2datetime(start).strftime('%V')
     end_week = ts2datetime(end-1).strftime('%V')
-    title = ts2datetime(start).strftime("%Y Month%m (W{0} - W{1})".format(start_week, end_week))
+    title = ts2datetime(start).strftime(
+        "%Y Month%m (W{0} - W{1})".format(start_week, end_week))
     tags = date_tag(start, 2)
 
     cut_data = get_cut_dataframe(start, end)
@@ -167,11 +175,13 @@ def monthly_report(month=None):
     dev_token, note_store = connect_note()
     resources = create_resources(['img/group_pie.png', 'img/type_table.png', 'img/group_bar.png',
                                   'img/type_bar_grid.png', 'img/sleep_plot.png'])
-    headings = ['1. Group Overview', '3. Type Detail', '2. Group Trends', '4. Type Trends', '5. Sleep Trends']
+    headings = ['1. Group Overview', '3. Type Detail',
+                '2. Group Trends', '4. Type Trends', '5. Sleep Trends']
     widths = [None] * 5
-    create_note(dev_token, note_store, 2, title, resources, headings, widths, tags)
+    create_note(dev_token, note_store, 2, title,
+                resources, headings, widths, tags)
     mysql_switch(0)
-    print "Generate monthly report for {0}!".format(title)
+    print("Generate monthly report for {0}!".format(title))
 
 
 def gen_report(level=0, date=None):
@@ -211,8 +221,10 @@ def test_func():
 def main():
     # Add argument to program for more flexible console control
     parser = argparse.ArgumentParser(description='Report system actions.')
-    parser.add_argument("-o", "--operation", choices=['re', 'db'], default='re', help="choose operation (default: re)")
-    parser.add_argument("-u", "--update", type=int, choices=[0, 1], help="update or rebuild db")
+    parser.add_argument(
+        "-o", "--operation", choices=['re', 'db'], default='re', help="choose operation (default: re)")
+    parser.add_argument("-u", "--update", type=int,
+                        choices=[0, 1], help="update or rebuild db")
     parser.add_argument("-l", "--level", type=int, default=0, choices=[0, 1, 2],
                         help="choose the report level (default: 0)")
     parser.add_argument("-d", "--date", help="Specify date/week/month for report. "

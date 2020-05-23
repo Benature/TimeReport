@@ -9,19 +9,19 @@ def mysql_switch(onoff):
     """
     import commands
     if onoff == 0:
-        print commands.getstatusoutput("mysql.server stop")
+        print(commands.getstatusoutput("mysql.server stop"))
     elif onoff == 1:
-        print commands.getstatusoutput("mysql.server start")
+        print(commands.getstatusoutput("mysql.server start"))
 
 
 def connect_db():
     """Connect database and return connection, cursor."""
     config = {
-      'user': 'root',
-      'password': 'root',
-      'host': 'localhost',
-      'database': 'time',
-      'raise_on_warnings': True,
+        'user': 'root',
+        'password': 'root',
+        'host': 'localhost',
+        'database': 'time',
+        'raise_on_warnings': True,
     }
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
@@ -53,7 +53,7 @@ def empty_db(table='both', op='truncate'):
         cursor.execute(query2)
     cnx.commit()
     cnx.close()
-    print echo
+    print(echo)
 
 
 def create_types_table():
